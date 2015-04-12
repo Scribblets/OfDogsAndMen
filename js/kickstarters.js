@@ -928,9 +928,10 @@
 		
 		$(victim).fadeOut(function() {
 			$(victim).html(image);
-			setTimeout(function(){ 
+			$(victim).load(function() {
 				$(victim).fadeIn();
-			}, 500);
+			});
+			//$(victim).fadeIn();
 		});
 	}
 	
