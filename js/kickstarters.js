@@ -711,7 +711,7 @@
 		}
 	};
 	
-	var images = {
+	var image_urls = {
 		_urls: [
 			"img/victims/1.jpg",
 			"img/victims/2.jpg",
@@ -802,6 +802,13 @@
 		}
 	};
 	
+	var images = {
+		_images: [],
+		getImages: function() {
+			return this._images;
+		}
+	}
+	
 	var victim_slots = {
 		_slots : [
 			"#victim-slot-1",
@@ -852,9 +859,10 @@
 	function init() {	
 		config_backers();
 		config_elements();
+		preload_images(image_urls.getURLs(), images);
 		config_images();
 		config_victims();
-		
+				
 		for(var i = 0; i < 12; i++) {
 			var backer = getRandomItem(unused_backers, used_backers);
 			var id = "#backer-" + (i + 1);
@@ -864,7 +872,7 @@
 		for(var i = 0; i < 18; i++) {
 			var image = getRandomItem(unused_images, used_images);
 			var id = "#victim-slot-" + (i + 1);
-			$(id).attr('src', image);
+			$(id).html(image);
 		}
 		
 		startLoop();
@@ -909,18 +917,29 @@
 		// Display Victims
 		var victim = getRandomItem(unused_victims, used_victims);
 		var image = getRandomItem(unused_images, used_images);
-		var current_image = $(victim).attr('src');
+		var current_image = $(victim).find("img");
+		
+		//console.log(current_image);
 		
 		current_images.remove(current_image);
 		current_images.push(image);
 		
+		console.log(current_images.length);
+		
 		$(victim).fadeOut(function() {
-			$(victim).attr('src', image);
+			$(victim).html(image);
 			$(victim).load(function() {
 				$(victim).fadeIn();
 			});
-			// $(victim).fadeIn();
+			$(victim).fadeIn();
 		});
+	}
+	
+	function preload_images(urls, images) {
+		for(i = 0; i < urls.length; i++) {
+			images._images[i] = new Image();
+			images._images[i].src = urls[i];
+		}
 	}
 	
 	function getRandomIndex(min, max) {
@@ -949,7 +968,7 @@
 	
 	function config_images() {
 		used_images = [];
-		unused_images.push.apply(unused_images, images.getURLs());
+		unused_images.push.apply(unused_images, images.getImages());
 	}
 	
 	function config_victims() {
