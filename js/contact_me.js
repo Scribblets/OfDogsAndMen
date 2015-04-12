@@ -8,44 +8,52 @@ $(function() {
         submitSuccess: function($form, event) {
             event.preventDefault(); // prevent default submit behaviour
             // get values from FORM
-            var name = $("input#name").val();
-            var email = $("input#email").val();
-            var phone = $("input#phone").val();
-            var message = $("textarea#message").val();
-            var firstName = name; // For Success/Failure Message
-            // Check for white space in name for Success/Fail message
-            if (firstName.indexOf(' ') >= 0) {
-                firstName = name.split(' ').slice(0, -1).join(' ');
-            }
+            var email = $("input#mce-EMAIL").val();
+			var first_name = $("input#mce-FNAME").val();
+			var last_name = $("input#mce-LNAME").val();
+			
             $.ajax({
-                url: "././mail/contact_me.php",
+                url: "http://puppycide.us7.list-manage.com/subscribe/post-json?u=32141e81f3ff567efe9649058&id=eacecc9039&c=?",
                 type: "POST",
                 data: {
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    message: message
+                    FNAME: first_name,
+                    LNAME: last_name,
+                    EMAIL: email
                 },
+                dataType: 'jsonp',
                 cache: false,
-                success: function() {
-                    // Success message
-                    $('#success').html("<div class='alert alert-success'>");
-                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
-                        .append("</button>");
-                    $('#success > .alert-success')
-                        .append("<strong>Your message has been sent. </strong>");
-                    $('#success > .alert-success')
-                        .append('</div>');
+                success: function(data) {
+	                var message = data.msg;
+	                console.log(data);
+	                if(data.result != "success" || data.result == "error") {
+			            // Fail message
+	                    $('#success').html("<div class='alert alert-danger'>");
+	                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+	                        .append("</button>");
+	                    $('#success > .alert-danger').append('<strong><i class="fa fa-times"></i> </strong>' + message);
+	                    $('#success > .alert-danger').append('</div>');
+	                    //clear all fields
+	                    $('#contactForm').trigger("reset");
+	                } else {
+		             	// Success message
+	                    $('#success').html("<div class='alert alert-warning'>");
+	                    $('#success > .alert-warning').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+	                        .append("</button>");
+	                    $('#success > .alert-warning')
+	                        .append('<strong><i class="fa fa-exclamation"></i> </strong>' + message);
+	                    $('#success > .alert-warning')
+	                        .append('</div>');   
+	                }
 
                     //clear all fields
                     $('#contactForm').trigger("reset");
                 },
-                error: function() {
+                error: function(err) {
                     // Fail message
                     $('#success').html("<div class='alert alert-danger'>");
                     $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
                         .append("</button>");
-                    $('#success > .alert-danger').append("<strong>Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!");
+                    $('#success > .alert-danger').append('<strong><i class="fa fa-times"></i> </strong> Sorry, it seems that the server is not responding. Please try again later!');
                     $('#success > .alert-danger').append('</div>');
                     //clear all fields
                     $('#contactForm').trigger("reset");
