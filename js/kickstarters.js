@@ -916,7 +916,10 @@
 		
 		$(victim).fadeOut(function() {
 			$(victim).attr('src', image);
-			$(victim).fadeIn();
+			$(victim).load(function() {
+				$(victim).fadeIn();
+			});
+			// $(victim).fadeIn();
 		});
 	}
 	
