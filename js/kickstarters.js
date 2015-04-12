@@ -711,6 +711,130 @@
 		}
 	};
 	
+	var images = {
+		_urls: [
+			"img/victims/1.jpg",
+			"img/victims/2.jpg",
+			"img/victims/3.jpg",
+			"img/victims/4.jpg",
+			"img/victims/5.jpg",
+			"img/victims/6.jpg",
+			"img/victims/7.jpg",
+			"img/victims/8.jpg",
+			"img/victims/9.jpg",
+			"img/victims/10.jpg",
+			"img/victims/11.jpg",
+			"img/victims/12.jpg",
+			"img/victims/13.jpg",
+			"img/victims/14.jpg",
+			"img/victims/15.jpg",
+			"img/victims/16.jpg",
+			"img/victims/17.jpg",
+			"img/victims/18.jpg",
+			"img/victims/19.jpg",
+			"img/victims/20.jpg",
+			"img/victims/21.jpg",
+			"img/victims/22.jpg",
+			"img/victims/23.jpg",
+			"img/victims/24.jpg",
+			"img/victims/25.jpg",
+			"img/victims/26.jpg",
+			"img/victims/27.jpg",
+			"img/victims/28.jpg",
+			"img/victims/29.jpg",
+			"img/victims/30.jpg",
+			"img/victims/31.jpg",
+			"img/victims/32.jpg",
+			"img/victims/33.jpg",
+			"img/victims/34.jpg",
+			"img/victims/35.jpg",
+			"img/victims/36.jpg",
+			"img/victims/37.jpg",
+			"img/victims/38.jpg",
+			"img/victims/39.jpg",
+			"img/victims/40.jpg",
+			"img/victims/41.jpg",
+			"img/victims/42.jpg",
+			"img/victims/43.jpg",
+			"img/victims/44.jpg",
+			"img/victims/45.jpg",
+			"img/victims/46.jpg",
+			"img/victims/47.jpg",
+			"img/victims/48.jpg",
+			"img/victims/49.jpg",
+			"img/victims/50.jpg",
+			"img/victims/51.jpg",
+			"img/victims/52.jpg",
+			"img/victims/53.jpg",
+			"img/victims/54.jpg",
+			"img/victims/55.jpg",
+			"img/victims/56.jpg",
+			"img/victims/57.jpg",
+			"img/victims/58.jpg",
+			"img/victims/59.jpg",
+			"img/victims/60.jpg",
+			"img/victims/61.jpg",
+			"img/victims/62.jpg",
+			"img/victims/63.jpg",
+			"img/victims/64.jpg",
+			"img/victims/65.jpg",
+			"img/victims/66.jpg",
+			"img/victims/67.jpg",
+			"img/victims/68.jpg",
+			"img/victims/69.jpg",
+			"img/victims/70.jpg",
+			"img/victims/71.jpg",
+			"img/victims/72.jpg",
+			"img/victims/73.jpg",
+			"img/victims/74.jpg",
+			"img/victims/75.jpg",
+			"img/victims/76.jpg",
+			"img/victims/77.jpg",
+			"img/victims/78.jpg",
+			"img/victims/79.jpg",
+			"img/victims/80.jpg",
+			"img/victims/81.jpg",
+			"img/victims/82.jpg",
+			"img/victims/83.jpg"
+		],
+		getURLs: function() {
+			return this._urls;
+		}
+	};
+	
+	var victim_slots = {
+		_slots : [
+			"#victim-slot-1",
+			"#victim-slot-2",
+			"#victim-slot-3",
+			"#victim-slot-4",
+			"#victim-slot-5",
+			"#victim-slot-6",
+			"#victim-slot-7",
+			"#victim-slot-8",
+			"#victim-slot-9",
+			"#victim-slot-10",
+			"#victim-slot-11",
+			"#victim-slot-12",
+			"#victim-slot-13",
+			"#victim-slot-14",
+			"#victim-slot-15",
+			"#victim-slot-16",
+			"#victim-slot-17",
+			"#victim-slot-18"
+		],
+		getSlots: function() {
+			return this._slots;
+		}
+	};
+	
+	var unused_images = [];
+	var used_images = [];
+	var current_images = [];
+	
+	var unused_victims = [];
+	var used_victims = [];
+	
 	var unused_backers = [];
 	var used_backers = [];
 	var current_backers = [];
@@ -728,11 +852,19 @@
 	function init() {	
 		config_backers();
 		config_elements();
+		config_images();
+		config_victims();
 		
 		for(var i = 0; i < 12; i++) {
 			var backer = getRandomItem(unused_backers, used_backers);
 			var id = "#backer-" + (i + 1);
 			$(id).html(backer);
+		}
+		
+		for(var i = 0; i < 18; i++) {
+			var image = getRandomItem(unused_images, used_images);
+			var id = "#victim-slot-" + (i + 1);
+			$(id).attr('src', image);
 		}
 		
 		startLoop();
@@ -741,18 +873,27 @@
 	// STARTS and Resets the loop if any
 	function startLoop() {
 	    if(interval > 0) clearInterval(interval);  // stop
-	    interval = setInterval(updateBacker, frequency);  // run
+	    interval = setInterval(update, frequency);  // run
 	}
 	
-	function updateBacker() {
+	function update() {
 		if(unused_elements.length == 0) {
 			config_elements();
 		}
 		
 		if(unused_backers.length == 0) {
 			config_backers();
-		}		
-
+		}
+		
+		if(unused_victims.length == 0) {
+			config_victims();
+		}
+		
+		if(unused_images.length == 0) {
+			config_images();
+		}
+		
+		// Display Backers
 		var element = getRandomItem(unused_elements, used_elements);
 		var backer = getRandomItem(unused_backers, used_backers);
 		var current_backer = $(element).html();
@@ -763,6 +904,19 @@
 		$(element).fadeOut(function() {
 			$(element).html(backer);
 			$(element).fadeIn();
+		});
+		
+		// Display Victims
+		var victim = getRandomItem(unused_victims, used_victims);
+		var image = getRandomItem(unused_images, used_images);
+		var current_image = $(victim).attr('src');
+		
+		current_images.remove(current_image);
+		current_images.push(image);
+		
+		$(victim).fadeOut(function() {
+			$(victim).attr('src', image);
+			$(victim).fadeIn();
 		});
 	}
 	
@@ -788,6 +942,16 @@
 	function config_backers() {
 		used_backers = [];
 		unused_backers.push.apply(unused_backers, backers.getNames());
+	}
+	
+	function config_images() {
+		used_images = [];
+		unused_images.push.apply(unused_images, images.getURLs());
+	}
+	
+	function config_victims() {
+		used_victims = [];
+		unused_victims.push.apply(unused_victims, victim_slots.getSlots());
 	}
 	
 	Array.prototype.remove = function() {

@@ -245,7 +245,7 @@ fieldset[disabled] .btn-xl.active {
     }
 
     .navbar-default .navbar-brand {
-        font-size: 2em;
+        font-size: 1.7em;
         -webkit-transition: all .3s;
         -moz-transition: all .3s;
         transition: all .3s;
@@ -1086,7 +1086,13 @@ form h3 {
 	font-size: 1.2em !important;
 }
 
+.row.victims {
+	padding: 15px 0px;
+}
 
+nav li a {
+	font-size: .9em;
+}
 
 @media(min-width:1150px) {
 	.intro-text {
