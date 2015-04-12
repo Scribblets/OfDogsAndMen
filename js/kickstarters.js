@@ -928,10 +928,12 @@
 		
 		$(victim).fadeOut(function() {
 			$(victim).html(image);
+/*
 			$(victim).load(function() {
 				$(victim).fadeIn();
 			});
-			//$(victim).fadeIn();
+*/
+			$(victim).fadeIn();
 		});
 	}
 	
